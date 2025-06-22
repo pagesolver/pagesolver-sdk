@@ -13,7 +13,10 @@ on:
 jobs:
   publish:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
+      packages: write
+      
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -81,9 +84,9 @@ jobs:
           name: Release v${{ steps.version-check.outputs.package-version }}
           body: |
             ## Changes in v${{ steps.version-check.outputs.package-version }}
-            
+
             Published automatically from main branch.
-            
+
             ### Install
             ```bash
             npm install @pagesolver/sdk@${{ steps.version-check.outputs.package-version }}
