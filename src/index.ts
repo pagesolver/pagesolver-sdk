@@ -58,7 +58,7 @@ export class PageSolverClient {
   private async request<T>(
     endpoint: string,
     options: RequestInit = {}
-  ): Promise<ApiResponse<T>> {
+  ): Promise<T> {
     try {
       const url = `${this.baseUrl}${endpoint}`;
 
@@ -82,52 +82,53 @@ export class PageSolverClient {
       }
 
       if (!response.ok) {
-        return {
-          error:
-            (data as { error?: string })?.error || "An unknown error occurred",
-          status: response.status,
-        };
+        const errorMessage =
+          (data as { error?: string })?.error || "An unknown error occurred";
+        throw new Error(`API Error (${response.status}): ${errorMessage}`);
       }
 
-      return {
-        data: data as T,
-        status: response.status,
-      };
+      return data as T;
     } catch (error) {
-      return {
-        error: error instanceof Error ? error.message : "Network error",
-        status: 500,
-      };
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error("Network error occurred");
     }
   }
 
   // Comparison Images
-  async getComparisons(): Promise<
-    ApiResponse<{ comparisons: ComparisonImage[] }>
-  > {
-    return this.request<{ comparisons: ComparisonImage[] }>(
+  async getComparisons(): Promise<ComparisonImage[]> {
+    const response = await this.request<{ comparisons: ComparisonImage[] }>(
       "/business/comparisons"
     );
+    return response.comparisons;
   }
 
   // Showcase Images
-  async getShowcases(): Promise<ApiResponse<{ showcases: ShowcaseImage[] }>> {
-    return this.request<{ showcases: ShowcaseImage[] }>("/business/showcases");
+  async getShowcases(): Promise<ShowcaseImage[]> {
+    const response = await this.request<{ showcases: ShowcaseImage[] }>(
+      "/business/showcases"
+    );
+    return response.showcases;
   }
 
   // Quick Quotes
-  async getQuickQuotes(): Promise<ApiResponse<{ quotes: QuickQuote[] }>> {
-    return this.request<{ quotes: QuickQuote[] }>("/business/quick-quotes");
+  async getQuickQuotes(): Promise<QuickQuote[]> {
+    const response = await this.request<{ quotes: QuickQuote[] }>(
+      "/business/quick-quotes"
+    );
+    return response.quotes;
   }
 
   // Contact
-  async contact(data: ContactData): Promise<ApiResponse<ContactResponse>> {
-    return this.request<ContactResponse>("/business/contact", {
+  async contact(data: ContactData): Promise<boolean> {
+    const response = await this.request<ContactResponse>("/business/contact", {
       method: "POST",
       body: JSON.stringify(data),
     });
+    return response.success;
   }
 }
 
 // Export types for consumers
-export type { ApiResponse, ContactData, ContactResponse };
+export type { ContactData, ContactResponse };

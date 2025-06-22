@@ -19,33 +19,35 @@ import { PageSolverClient } from "@pagesolver/sdk";
 
 const client = new PageSolverClient("your-business-key");
 
-// Get comparisons
+// Get comparisons - returns array directly
 const comparisons = await client.getComparisons();
-if (comparisons.data) {
-  console.log(comparisons.data.comparisons);
-}
+console.log(comparisons); // ComparisonImage[]
 
-// Get showcases
+// Get showcases - returns array directly
 const showcases = await client.getShowcases();
-if (showcases.data) {
-  console.log(showcases.data.showcases);
-}
+console.log(showcases); // ShowcaseImage[]
 
-// Get quick quotes
+// Get quick quotes - returns array directly
 const quickQuotes = await client.getQuickQuotes();
-if (quickQuotes.data) {
-  console.log(quickQuotes.data.quotes);
-}
+console.log(quickQuotes); // QuickQuote[]
 
-// Send contact form
-const contactResult = await client.contact({
+// Send contact form - returns boolean
+const success = await client.contact({
   name: "John Doe",
   email: "john@example.com",
   message: "Hello from the SDK!",
 });
 
-if (contactResult.data?.success) {
+if (success) {
   console.log("Contact form sent successfully!");
+}
+
+// Error handling with try/catch
+try {
+  const comparisons = await client.getComparisons();
+  console.log(`Found ${comparisons.length} comparisons`);
+} catch (error) {
+  console.error("Failed to get comparisons:", error.message);
 }
 ```
 
@@ -68,8 +70,8 @@ new PageSolverClient(businessKey: string)
 Retrieves all comparison images for your business.
 
 ```typescript
-const result = await client.getComparisons();
-// Returns: ApiResponse<{ comparisons: ComparisonImage[] }>
+const comparisons = await client.getComparisons();
+// Returns: ComparisonImage[]
 ```
 
 ##### `getShowcases()`
@@ -77,8 +79,8 @@ const result = await client.getComparisons();
 Retrieves all showcase images for your business.
 
 ```typescript
-const result = await client.getShowcases();
-// Returns: ApiResponse<{ showcases: ShowcaseImage[] }>
+const showcases = await client.getShowcases();
+// Returns: ShowcaseImage[]
 ```
 
 ##### `getQuickQuotes()`
@@ -86,8 +88,8 @@ const result = await client.getShowcases();
 Retrieves all quick quotes for your business.
 
 ```typescript
-const result = await client.getQuickQuotes();
-// Returns: ApiResponse<{ quotes: QuickQuote[] }>
+const quotes = await client.getQuickQuotes();
+// Returns: QuickQuote[]
 ```
 
 ##### `contact(data: ContactData)`
@@ -95,13 +97,13 @@ const result = await client.getQuickQuotes();
 Sends a contact form submission.
 
 ```typescript
-const result = await client.contact({
+const success = await client.contact({
   name: "John Doe",
   email: "john@example.com",
   phone: "+1234567890", // optional
   message: "Hello!", // optional
 });
-// Returns: ApiResponse<ContactResponse>
+// Returns: boolean
 ```
 
 ## Types

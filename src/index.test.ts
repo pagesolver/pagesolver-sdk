@@ -7,7 +7,13 @@ const mockFetch = mock(() =>
     ok: true,
     status: 200,
     headers: new Headers({ "Content-Type": "application/json" }),
-    json: () => Promise.resolve({ data: "test" }),
+    json: () =>
+      Promise.resolve({
+        comparisons: [{ id: "1", title: "test" }],
+        showcases: [{ id: "2", title: "test" }],
+        quotes: [{ id: "3", name: "test" }],
+        success: true,
+      }),
   } as Response)
 );
 
@@ -20,9 +26,9 @@ describe("PageSolverClient", () => {
     expect(client).toBeInstanceOf(PageSolverClient);
   });
 
-  it("should make a request to get comparisons", async () => {
+  it("should return comparisons array directly", async () => {
     const result = await client.getComparisons();
-    expect(result.status).toBe(200);
+    expect(Array.isArray(result)).toBe(true);
     expect(mockFetch).toHaveBeenCalledWith(
       "https://pagesolver.com/api/v1/business/comparisons",
       expect.objectContaining({
@@ -34,9 +40,9 @@ describe("PageSolverClient", () => {
     );
   });
 
-  it("should make a request to get showcases", async () => {
+  it("should return showcases array directly", async () => {
     const result = await client.getShowcases();
-    expect(result.status).toBe(200);
+    expect(Array.isArray(result)).toBe(true);
     expect(mockFetch).toHaveBeenCalledWith(
       "https://pagesolver.com/api/v1/business/showcases",
       expect.objectContaining({
@@ -48,9 +54,9 @@ describe("PageSolverClient", () => {
     );
   });
 
-  it("should make a request to get quick quotes", async () => {
+  it("should return quick quotes array directly", async () => {
     const result = await client.getQuickQuotes();
-    expect(result.status).toBe(200);
+    expect(Array.isArray(result)).toBe(true);
     expect(mockFetch).toHaveBeenCalledWith(
       "https://pagesolver.com/api/v1/business/quick-quotes",
       expect.objectContaining({
@@ -62,7 +68,7 @@ describe("PageSolverClient", () => {
     );
   });
 
-  it("should make a POST request for contact", async () => {
+  it("should return boolean for contact success", async () => {
     const contactData = {
       name: "John Doe",
       email: "john@example.com",
@@ -70,7 +76,7 @@ describe("PageSolverClient", () => {
     };
 
     const result = await client.contact(contactData);
-    expect(result.status).toBe(200);
+    expect(typeof result).toBe("boolean");
     expect(mockFetch).toHaveBeenCalledWith(
       "https://pagesolver.com/api/v1/business/contact",
       expect.objectContaining({
@@ -81,6 +87,23 @@ describe("PageSolverClient", () => {
         }),
         body: JSON.stringify(contactData),
       })
+    );
+  });
+
+  it("should throw error on API failure", async () => {
+    const errorFetch = mock(() =>
+      Promise.resolve({
+        ok: false,
+        status: 400,
+        headers: new Headers({ "Content-Type": "application/json" }),
+        json: () => Promise.resolve({ error: "Bad request" }),
+      } as Response)
+    );
+
+    globalThis.fetch = errorFetch as unknown as typeof fetch;
+
+    await expect(client.getComparisons()).rejects.toThrow(
+      "API Error (400): Bad request"
     );
   });
 });
