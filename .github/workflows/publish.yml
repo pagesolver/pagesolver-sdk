@@ -42,6 +42,16 @@ jobs:
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
 
+      - name: Setup Node.js for npm publishing
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Configure npm authentication
+        run: |
+          npm config set //registry.npmjs.org/:_authToken ${{ secrets.NPM_TOKEN }}
+
       - name: Check if version changed
         id: version-check
         run: |
@@ -59,7 +69,9 @@ jobs:
 
       - name: Publish to NPM
         if: steps.version-check.outputs.should-publish == 'true'
-        run: bun publish --access public --no-git-checks
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create GitHub Release
         if: steps.version-check.outputs.should-publish == 'true'
