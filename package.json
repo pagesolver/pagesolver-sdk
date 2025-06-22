@@ -25,9 +25,9 @@
     "type-check": "bunx tsc --noEmit",
     "prepare": "bun run build",
     "prepublishOnly": "bun run lint && bun run type-check && bun run test && bun run build",
-    "version:patch": "npm version patch --no-git-tag-version && git add . && git commit -m \"Bump version to $(node -p 'require(\"./package.json\").version')\" && git push",
-    "version:minor": "npm version minor --no-git-tag-version && git add . && git commit -m \"Bump version to $(node -p 'require(\"./package.json\").version')\" && git push",
-    "version:major": "npm version major --no-git-tag-version && git add . && git commit -m \"Bump version to $(node -p 'require(\"./package.json\").version')\" && git push"
+    "version:patch": "npm version patch",
+    "version:minor": "npm version minor",
+    "version:major": "npm version major"
   },
   "keywords": [
     "pagesolver",
