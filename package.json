@@ -1,6 +1,6 @@
 {
   "name": "@pagesolver/sdk",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Official SDK for PageSolver API",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -24,7 +24,10 @@
     "lint:fix": "bunx @biomejs/biome check --apply src",
     "type-check": "bunx tsc --noEmit",
     "prepare": "bun run build",
-    "prepublishOnly": "bun run lint && bun run type-check && bun run test && bun run build"
+    "prepublishOnly": "bun run lint && bun run type-check && bun run test && bun run build",
+    "version:patch": "npm version patch --no-git-tag-version && git add . && git commit -m \"Bump version to $(node -p 'require(\"./package.json\").version')\" && git push",
+    "version:minor": "npm version minor --no-git-tag-version && git add . && git commit -m \"Bump version to $(node -p 'require(\"./package.json\").version')\" && git push",
+    "version:major": "npm version major --no-git-tag-version && git add . && git commit -m \"Bump version to $(node -p 'require(\"./package.json\").version')\" && git push"
   },
   "keywords": [
     "pagesolver",
