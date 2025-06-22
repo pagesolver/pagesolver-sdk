@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "build": "bun build src/index.ts --outdir dist --target node --minify --sourcemap=external && bun run build:types",
-    "build:types": "bunx tsc --emitDeclarationOnly --outDir dist",
+    "build:types": "bunx tsc --project tsconfig.build.json",
     "dev": "bun --watch src/index.ts",
     "test": "bun test",
     "lint": "bunx @biomejs/biome check src",
