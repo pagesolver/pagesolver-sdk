@@ -71,21 +71,17 @@ jobs:
         if: steps.version-check.outputs.should-publish == 'true'
         run: npm publish --access public
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      - name: Create GitHub Release
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}      - name: Create GitHub Release
         if: steps.version-check.outputs.should-publish == 'true'
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v1
         with:
           tag_name: v${{ steps.version-check.outputs.package-version }}
-          release_name: Release v${{ steps.version-check.outputs.package-version }}
+          name: Release v${{ steps.version-check.outputs.package-version }}
           body: |
             ## Changes in v${{ steps.version-check.outputs.package-version }}
-
+            
             Published automatically from main branch.
-
+            
             ### Install
             ```bash
             npm install @pagesolver/sdk@${{ steps.version-check.outputs.package-version }}
