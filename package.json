@@ -1,0 +1,58 @@
+{
+  "name": "@pagesolver/sdk",
+  "version": "1.0.0",
+  "description": "Official SDK for PageSolver API",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "bun build src/index.ts --outdir dist --target node --minify --sourcemap=external && bun run build:types",
+    "build:types": "bunx tsc --emitDeclarationOnly --outDir dist",
+    "dev": "bun --watch src/index.ts",
+    "test": "bun test",
+    "lint": "bunx @biomejs/biome check src",
+    "lint:fix": "bunx @biomejs/biome check --apply src",
+    "type-check": "bunx tsc --noEmit",
+    "prepare": "bun run build",
+    "prepublishOnly": "bun run lint && bun run type-check && bun run test && bun run build"
+  },
+  "keywords": [
+    "pagesolver",
+    "api",
+    "sdk",
+    "typescript",
+    "web-development"
+  ],
+  "author": "PageSolver Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pagesolver/pagesolver-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pagesolver/pagesolver-sdk/issues"
+  },
+  "homepage": "https://github.com/pagesolver/pagesolver-sdk#readme",
+  "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
+    "@types/bun": "latest",
+    "typescript": "^5.5.2"
+  },
+  "peerDependencies": {
+    "typescript": ">=4.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "bun": ">=1.0.0"
+  }
+}
