@@ -1,6 +1,6 @@
 {
   "name": "@pagesolver/sdk",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Official SDK for PageSolver API",
   "main": "dist/index.js",
   "module": "dist/index.js",
