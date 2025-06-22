@@ -31,6 +31,12 @@ if (showcases.data) {
   console.log(showcases.data.showcases);
 }
 
+// Get quick quotes
+const quickQuotes = await client.getQuickQuotes();
+if (quickQuotes.data) {
+  console.log(quickQuotes.data.quotes);
+}
+
 // Send contact form
 const contactResult = await client.contact({
   name: "John Doe",
@@ -75,6 +81,15 @@ const result = await client.getShowcases();
 // Returns: ApiResponse<{ showcases: ShowcaseImage[] }>
 ```
 
+##### `getQuickQuotes()`
+
+Retrieves all quick quotes for your business.
+
+```typescript
+const result = await client.getQuickQuotes();
+// Returns: ApiResponse<{ quotes: QuickQuote[] }>
+```
+
 ##### `contact(data: ContactData)`
 
 Sends a contact form submission.
@@ -96,11 +111,12 @@ const result = await client.contact({
 ```typescript
 interface ComparisonImage {
   id: string;
-  url: string;
-  title?: string;
-  description?: string;
-  createdAt: string;
-  updatedAt: string;
+  businessId: string;
+  beforeUrl: string;
+  afterUrl: string;
+  description: string | null;
+  createdAt: Date;
+  title: string;
 }
 ```
 
@@ -109,11 +125,27 @@ interface ComparisonImage {
 ```typescript
 interface ShowcaseImage {
   id: string;
-  url: string;
-  title?: string;
-  description?: string;
-  createdAt: string;
-  updatedAt: string;
+  businessId: string;
+  blobUrl: string[];
+  createdAt: Date;
+  description: string | null;
+  title: string;
+}
+```
+
+### QuickQuote
+
+```typescript
+interface QuickQuote {
+  id: string;
+  businessId: string;
+  parentId: string | null;
+  name: string;
+  description: string | null;
+  basePrice: string | null;
+  enabled: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 }
 ```
 
@@ -155,33 +187,6 @@ if (result.error) {
 } else {
   console.log("Success:", result.data);
 }
-```
-
-## Development
-
-### Building
-
-```bash
-bun run build
-```
-
-### Testing
-
-```bash
-bun test
-```
-
-### Linting
-
-```bash
-bun run lint
-bun run lint:fix
-```
-
-### Type Checking
-
-```bash
-bun run type-check
 ```
 
 ## License

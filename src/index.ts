@@ -47,14 +47,6 @@ interface ContactResponse {
   success: boolean;
 }
 
-interface QuickQuoteRequestData {
-  name: string;
-  description?: string;
-  basePrice?: string;
-  parentId?: string;
-  enabled?: boolean;
-}
-
 export class PageSolverClient {
   private baseUrl = "https://pagesolver.com/api/v1";
   private businessKey: string;
@@ -128,33 +120,6 @@ export class PageSolverClient {
     return this.request<{ quotes: QuickQuote[] }>("/business/quick-quotes");
   }
 
-  async createQuickQuote(
-    data: QuickQuoteRequestData
-  ): Promise<ApiResponse<QuickQuote>> {
-    return this.request<QuickQuote>("/business/quick-quotes", {
-      method: "POST",
-      body: JSON.stringify(data),
-    });
-  }
-
-  async updateQuickQuote(
-    id: string,
-    data: Partial<QuickQuoteRequestData>
-  ): Promise<ApiResponse<QuickQuote>> {
-    return this.request<QuickQuote>(`/business/quick-quotes/${id}`, {
-      method: "PUT",
-      body: JSON.stringify(data),
-    });
-  }
-
-  async deleteQuickQuote(
-    id: string
-  ): Promise<ApiResponse<{ success: boolean }>> {
-    return this.request<{ success: boolean }>(`/business/quick-quotes/${id}`, {
-      method: "DELETE",
-    });
-  }
-
   // Contact
   async contact(data: ContactData): Promise<ApiResponse<ContactResponse>> {
     return this.request<ContactResponse>("/business/contact", {
@@ -165,9 +130,4 @@ export class PageSolverClient {
 }
 
 // Export types for consumers
-export type {
-  ApiResponse,
-  ContactData,
-  ContactResponse,
-  QuickQuoteRequestData,
-};
+export type { ApiResponse, ContactData, ContactResponse };

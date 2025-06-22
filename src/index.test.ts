@@ -62,61 +62,6 @@ describe("PageSolverClient", () => {
     );
   });
 
-  it("should make a request to create a quick quote", async () => {
-    const quoteData = {
-      name: "Test Quote",
-      description: "A test quote",
-      basePrice: "100.00",
-    };
-
-    const result = await client.createQuickQuote(quoteData);
-    expect(result.status).toBe(200);
-    expect(mockFetch).toHaveBeenCalledWith(
-      "https://pagesolver.com/api/v1/business/quick-quotes",
-      expect.objectContaining({
-        method: "POST",
-        headers: expect.objectContaining({
-          "Content-Type": "application/json",
-          "x-business-key": "test-business-key",
-        }),
-        body: JSON.stringify(quoteData),
-      })
-    );
-  });
-
-  it("should make a request to update a quick quote", async () => {
-    const updateData = { name: "Updated Quote" };
-
-    const result = await client.updateQuickQuote("789", updateData);
-    expect(result.status).toBe(200);
-    expect(mockFetch).toHaveBeenCalledWith(
-      "https://pagesolver.com/api/v1/business/quick-quotes/789",
-      expect.objectContaining({
-        method: "PUT",
-        headers: expect.objectContaining({
-          "Content-Type": "application/json",
-          "x-business-key": "test-business-key",
-        }),
-        body: JSON.stringify(updateData),
-      })
-    );
-  });
-
-  it("should make a request to delete a quick quote", async () => {
-    const result = await client.deleteQuickQuote("789");
-    expect(result.status).toBe(200);
-    expect(mockFetch).toHaveBeenCalledWith(
-      "https://pagesolver.com/api/v1/business/quick-quotes/789",
-      expect.objectContaining({
-        method: "DELETE",
-        headers: expect.objectContaining({
-          "Content-Type": "application/json",
-          "x-business-key": "test-business-key",
-        }),
-      })
-    );
-  });
-
   it("should make a POST request for contact", async () => {
     const contactData = {
       name: "John Doe",
