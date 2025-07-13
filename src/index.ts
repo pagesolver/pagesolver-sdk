@@ -1,7 +1,7 @@
 // Database schema types
 export interface ComparisonImage {
   id: string;
-  businessId: string;
+  clientId: number;
   beforeUrl: string;
   afterUrl: string;
   description: string | null;
@@ -11,7 +11,7 @@ export interface ComparisonImage {
 
 export interface ShowcaseImage {
   id: string;
-  businessId: string;
+  clientId: number;
   blobUrl: string[];
   createdAt: Date;
   description: string | null;
@@ -20,7 +20,7 @@ export interface ShowcaseImage {
 
 export interface QuickQuote {
   id: string;
-  businessId: string;
+  clientId: number;
   parentId: string | null;
   name: string;
   description: string | null;
@@ -49,10 +49,10 @@ interface ContactResponse {
 
 export class PageSolverClient {
   private baseUrl = "https://pagesolver.com/api/v1";
-  private businessKey: string;
+  private clientKey: string;
 
-  constructor(businessKey: string) {
-    this.businessKey = businessKey;
+  constructor(clientKey: string) {
+    this.clientKey = clientKey;
   }
 
   private async request<T>(
@@ -64,7 +64,7 @@ export class PageSolverClient {
 
       const headers = {
         "Content-Type": "application/json",
-        "x-business-key": this.businessKey,
+        "x-client-key": this.clientKey,
         ...options.headers,
       };
 
