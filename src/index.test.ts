@@ -9,9 +9,9 @@ const mockFetch = mock(() =>
     headers: new Headers({ "Content-Type": "application/json" }),
     json: () =>
       Promise.resolve({
-        comparisons: [{ id: "1", title: "test" }],
-        showcases: [{ id: "2", title: "test" }],
-        quotes: [{ id: "3", name: "test" }],
+        comparisons: [{ id: "1", clientId: 123, title: "test" }],
+        showcases: [{ id: "2", clientId: 123, title: "test" }],
+        quotes: [{ id: "3", clientId: 123, name: "test" }],
         success: true,
       }),
   } as Response)
@@ -20,9 +20,9 @@ const mockFetch = mock(() =>
 globalThis.fetch = mockFetch as unknown as typeof fetch;
 
 describe("PageSolverClient", () => {
-  const client = new PageSolverClient("test-business-key");
+  const client = new PageSolverClient("test-client-key");
 
-  it("should create a client with business key", () => {
+  it("should create a client with client key", () => {
     expect(client).toBeInstanceOf(PageSolverClient);
   });
 
@@ -34,7 +34,7 @@ describe("PageSolverClient", () => {
       expect.objectContaining({
         headers: expect.objectContaining({
           "Content-Type": "application/json",
-          "x-business-key": "test-business-key",
+          "x-client-key": "test-client-key",
         }),
       })
     );
@@ -48,7 +48,7 @@ describe("PageSolverClient", () => {
       expect.objectContaining({
         headers: expect.objectContaining({
           "Content-Type": "application/json",
-          "x-business-key": "test-business-key",
+          "x-client-key": "test-client-key",
         }),
       })
     );
@@ -62,7 +62,7 @@ describe("PageSolverClient", () => {
       expect.objectContaining({
         headers: expect.objectContaining({
           "Content-Type": "application/json",
-          "x-business-key": "test-business-key",
+          "x-client-key": "test-client-key",
         }),
       })
     );
@@ -83,7 +83,7 @@ describe("PageSolverClient", () => {
         method: "POST",
         headers: expect.objectContaining({
           "Content-Type": "application/json",
-          "x-business-key": "test-business-key",
+          "x-client-key": "test-client-key",
         }),
         body: JSON.stringify(contactData),
       })
