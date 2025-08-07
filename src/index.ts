@@ -1,39 +1,23 @@
 // Database schema types
 export interface ComparisonImage {
   id: string;
-  clientId: number;
-  beforeUrl: string;
-  afterUrl: string;
-  description: string | null;
-  createdAt: Date;
+  business_id: number;
+  before_url: string;
+  after_url: string;
   title: string;
+  description: string | null;
+  updated_at: Date;
+  created_at: Date;
 }
 
 export interface ShowcaseImage {
   id: string;
-  clientId: number;
-  blobUrl: string[];
-  createdAt: Date;
-  description: string | null;
+  business_id: number;
+  image_url: string;
   title: string;
-}
-
-export interface QuickQuote {
-  id: string;
-  clientId: number;
-  parentId: string | null;
-  name: string;
   description: string | null;
-  basePrice: string | null;
-  enabled: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-interface ApiResponse<T> {
-  data?: T;
-  error?: string;
-  status: number;
+  updated_at: Date;
+  created_at: Date;
 }
 
 interface ContactData {
@@ -110,14 +94,6 @@ export class PageSolverClient {
       "/business/showcases"
     );
     return response.showcases;
-  }
-
-  // Quick Quotes
-  async getQuickQuotes(): Promise<QuickQuote[]> {
-    const response = await this.request<{ quotes: QuickQuote[] }>(
-      "/business/quick-quotes"
-    );
-    return response.quotes;
   }
 
   // Contact

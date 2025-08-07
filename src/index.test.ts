@@ -9,9 +9,25 @@ const mockFetch = mock(() =>
     headers: new Headers({ "Content-Type": "application/json" }),
     json: () =>
       Promise.resolve({
-        comparisons: [{ id: "1", clientId: 123, title: "test" }],
-        showcases: [{ id: "2", clientId: 123, title: "test" }],
-        quotes: [{ id: "3", clientId: 123, name: "test" }],
+        comparisons: [{ 
+          id: "1", 
+          business_id: 123, 
+          before_url: "before.jpg", 
+          after_url: "after.jpg", 
+          title: "test",
+          description: "test description",
+          updated_at: new Date(),
+          created_at: new Date()
+        }],
+        showcases: [{ 
+          id: "2", 
+          business_id: 123, 
+          image_url: "showcase.jpg", 
+          title: "test",
+          description: "test description",
+          updated_at: new Date(),
+          created_at: new Date()
+        }],
         success: true,
       }),
   } as Response)
@@ -45,20 +61,6 @@ describe("PageSolverClient", () => {
     expect(Array.isArray(result)).toBe(true);
     expect(mockFetch).toHaveBeenCalledWith(
       "https://pagesolver.com/api/v1/business/showcases",
-      expect.objectContaining({
-        headers: expect.objectContaining({
-          "Content-Type": "application/json",
-          "x-business-key": "test-business-key",
-        }),
-      })
-    );
-  });
-
-  it("should return quick quotes array directly", async () => {
-    const result = await client.getQuickQuotes();
-    expect(Array.isArray(result)).toBe(true);
-    expect(mockFetch).toHaveBeenCalledWith(
-      "https://pagesolver.com/api/v1/business/quick-quotes",
       expect.objectContaining({
         headers: expect.objectContaining({
           "Content-Type": "application/json",
