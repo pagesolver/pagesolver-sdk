@@ -49,10 +49,10 @@ interface ContactResponse {
 
 export class PageSolverClient {
   private baseUrl = "https://pagesolver.com/api/v1";
-  private clientKey: string;
+  private businessKey: string;
 
-  constructor(clientKey: string) {
-    this.clientKey = clientKey;
+  constructor(businessKey: string) {
+    this.businessKey = businessKey;
   }
 
   private async request<T>(
@@ -64,7 +64,7 @@ export class PageSolverClient {
 
       const headers = {
         "Content-Type": "application/json",
-        "x-client-key": this.clientKey,
+        "x-business-key": this.businessKey,
         ...options.headers,
       };
 

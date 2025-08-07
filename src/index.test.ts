@@ -20,9 +20,9 @@ const mockFetch = mock(() =>
 globalThis.fetch = mockFetch as unknown as typeof fetch;
 
 describe("PageSolverClient", () => {
-  const client = new PageSolverClient("test-client-key");
+  const client = new PageSolverClient("test-business-key");
 
-  it("should create a client with client key", () => {
+  it("should create a client with business key", () => {
     expect(client).toBeInstanceOf(PageSolverClient);
   });
 
@@ -34,7 +34,7 @@ describe("PageSolverClient", () => {
       expect.objectContaining({
         headers: expect.objectContaining({
           "Content-Type": "application/json",
-          "x-client-key": "test-client-key",
+          "x-business-key": "test-business-key",
         }),
       })
     );
@@ -48,7 +48,7 @@ describe("PageSolverClient", () => {
       expect.objectContaining({
         headers: expect.objectContaining({
           "Content-Type": "application/json",
-          "x-client-key": "test-client-key",
+          "x-business-key": "test-business-key",
         }),
       })
     );
@@ -62,7 +62,7 @@ describe("PageSolverClient", () => {
       expect.objectContaining({
         headers: expect.objectContaining({
           "Content-Type": "application/json",
-          "x-client-key": "test-client-key",
+          "x-business-key": "test-business-key",
         }),
       })
     );
@@ -83,7 +83,7 @@ describe("PageSolverClient", () => {
         method: "POST",
         headers: expect.objectContaining({
           "Content-Type": "application/json",
-          "x-client-key": "test-client-key",
+          "x-business-key": "test-business-key",
         }),
         body: JSON.stringify(contactData),
       })
