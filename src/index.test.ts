@@ -9,25 +9,29 @@ const mockFetch = mock(() =>
     headers: new Headers({ "Content-Type": "application/json" }),
     json: () =>
       Promise.resolve({
-        comparisons: [{ 
-          id: "1", 
-          business_id: 123, 
-          before_url: "before.jpg", 
-          after_url: "after.jpg", 
-          title: "test",
-          description: "test description",
-          updated_at: new Date(),
-          created_at: new Date()
-        }],
-        showcases: [{ 
-          id: "2", 
-          business_id: 123, 
-          image_url: "showcase.jpg", 
-          title: "test",
-          description: "test description",
-          updated_at: new Date(),
-          created_at: new Date()
-        }],
+        comparisons: [
+          {
+            id: "1",
+            business_id: 123,
+            before_url: "before.jpg",
+            after_url: "after.jpg",
+            title: "test",
+            description: "test description",
+            updated_at: new Date(),
+            created_at: new Date(),
+          },
+        ],
+        showcases: [
+          {
+            id: "2",
+            business_id: 123,
+            image_url: "showcase.jpg",
+            title: "test",
+            description: "test description",
+            updated_at: new Date(),
+            created_at: new Date(),
+          },
+        ],
         success: true,
       }),
   } as Response)
