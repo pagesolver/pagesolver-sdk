@@ -1,35 +1,18 @@
-// Database schema types
-export interface ComparisonImage {
-  id: string;
-  business_id: number;
-  before_url: string;
-  after_url: string;
-  title: string;
-  description: string | null;
-  updated_at: Date;
-  created_at: Date;
-}
-
-export interface ShowcaseImage {
-  id: string;
-  business_id: number;
-  image_url: string;
-  title: string;
-  description: string | null;
-  updated_at: Date;
-  created_at: Date;
-}
-
-interface ContactData {
-  name: string;
-  email: string;
-  phone?: string;
-  message?: string;
-}
-
-interface ContactResponse {
-  success: boolean;
-}
+// Import all types from the types file
+import type {
+  ComparisonImage,
+  ComparisonsResponse,
+  ContactData,
+  ContactResponse,
+  FacebookPost,
+  GoogleHoursResponse,
+  GoogleReview,
+  GoogleReviewsResponse,
+  InstagramPost,
+  ShowcaseImage,
+  ShowcasesResponse,
+  SocialMediaResponse,
+} from "./types";
 
 export class PageSolverClient {
   private baseUrl = "https://pagesolver.com/api/v1";
@@ -82,7 +65,7 @@ export class PageSolverClient {
 
   // Comparison Images
   async getComparisons(): Promise<ComparisonImage[]> {
-    const response = await this.request<{ comparisons: ComparisonImage[] }>(
+    const response = await this.request<ComparisonsResponse>(
       "/business/comparisons"
     );
     return response.comparisons;
@@ -90,21 +73,60 @@ export class PageSolverClient {
 
   // Showcase Images
   async getShowcases(): Promise<ShowcaseImage[]> {
-    const response = await this.request<{ showcases: ShowcaseImage[] }>(
+    const response = await this.request<ShowcasesResponse>(
       "/business/showcases"
     );
     return response.showcases;
   }
 
+  // Google Reviews
+  async getGoogleReviews(): Promise<GoogleReviewsResponse> {
+    return await this.request<GoogleReviewsResponse>(
+      "/business/google/reviews"
+    );
+  }
+
+  // Google Hours
+  async getGoogleHours(): Promise<GoogleHoursResponse> {
+    return await this.request<GoogleHoursResponse>("/business/google/hours");
+  }
+
+  // Social Media - Instagram
+  async getInstagramPosts(): Promise<SocialMediaResponse> {
+    return await this.request<SocialMediaResponse>(
+      "/business/social/instagram"
+    );
+  }
+
+  // Social Media - Facebook
+  async getFacebookPosts(): Promise<SocialMediaResponse> {
+    return await this.request<SocialMediaResponse>("/business/social/facebook");
+  }
+
   // Contact
-  async contact(data: ContactData): Promise<boolean> {
-    const response = await this.request<ContactResponse>("/business/contact", {
+  async contact(data: ContactData): Promise<ContactResponse> {
+    return await this.request<ContactResponse>("/business/contact", {
       method: "POST",
       body: JSON.stringify(data),
     });
-    return response.success;
   }
 }
 
-// Export types for consumers
-export type { ContactData, ContactResponse };
+// Re-export all types for consumers
+export type {
+  ComparisonImage,
+  ComparisonsResponse,
+  ShowcaseImage,
+  ShowcasesResponse,
+  ContactData,
+  ContactResponse,
+  GoogleReview,
+  GoogleReviewsResponse,
+  GoogleHoursResponse,
+  BusinessHours,
+  CurrentTime,
+  FacebookPost,
+  InstagramPost,
+  SocialMediaResponse,
+  BusinessInfo,
+} from "./types";
