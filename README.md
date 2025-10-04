@@ -27,28 +27,23 @@ console.log(comparisons); // ComparisonImage[]
 const showcases = await client.getShowcases();
 console.log(showcases); // ShowcaseImage[]
 
-// Get quick quotes - returns array directly
-const quickQuotes = await client.getQuickQuotes();
-console.log(quickQuotes); // QuickQuote[]
+// Google Business Profile data
+const reviews = await client.getGoogleReviews();
+const hours = await client.getGoogleHours();
 
-// Send contact form - returns boolean
-const success = await client.contact({
+// Latest social posts
+const instagram = await client.getInstagramPosts();
+const facebook = await client.getFacebookPosts();
+
+// Smart contact submissions (any fields allowed)
+const contact = await client.contact({
   name: "John Doe",
   email: "john@example.com",
+  service: "Detailing",
   message: "Hello from the SDK!",
 });
 
-if (success) {
-  console.log("Contact form sent successfully!");
-}
-
-// Error handling with try/catch
-try {
-  const comparisons = await client.getComparisons();
-  console.log(`Found ${comparisons.length} comparisons`);
-} catch (error) {
-  console.error("Failed to get comparisons:", error.message);
-}
+console.log(contact.success, contact.contactId);
 ```
 
 ## API Reference
@@ -65,129 +60,87 @@ new PageSolverClient(businessKey: string)
 
 #### Methods
 
-##### `getComparisons()`
+| Method | Description | Return Type |
+| --- | --- | --- |
+| `getComparisons()` | Fetch before/after comparison images | `ComparisonImage[]` |
+| `getShowcases()` | Fetch showcase gallery images | `ShowcaseImage[]` |
+| `getGoogleReviews()` | Fetch Google Business Profile reviews + metadata | `GoogleReviewsResponse` |
+| `getGoogleHours()` | Fetch Google Business Profile opening hours | `GoogleHoursResponse` |
+| `getInstagramPosts()` | Fetch recent Instagram posts (requires connected account) | `SocialMediaResponse` |
+| `getFacebookPosts()` | Fetch recent Facebook posts (requires connected account) | `SocialMediaResponse` |
+| `contact(data)` | Submit a contact form payload | `ContactResponse`
 
-Retrieves all comparison images for your business.
-
-```typescript
-const comparisons = await client.getComparisons();
-// Returns: ComparisonImage[]
-```
-
-##### `getShowcases()`
-
-Retrieves all showcase images for your business.
-
-```typescript
-const showcases = await client.getShowcases();
-// Returns: ShowcaseImage[]
-```
-
-##### `getQuickQuotes()`
-
-Retrieves all quick quotes for your business.
+All methods throw an `Error` when the API responds with a non-2xx status, so wrap calls in `try/catch` if you want to handle failures gracefully.
 
 ```typescript
-const quotes = await client.getQuickQuotes();
-// Returns: QuickQuote[]
-```
+try {
+  const comparisons = await client.getComparisons();
+  console.log(`Found ${comparisons.length} comparisons`);
+} catch (error) {
+  console.error("Failed to load comparisons", error);
+}
 
-##### `contact(data: ContactData)`
-
-Sends a contact form submission.
-
-```typescript
-const success = await client.contact({
-  name: "John Doe",
-  email: "john@example.com",
-  phone: "+1234567890", // optional
-  message: "Hello!", // optional
+const contact = await client.contact({
+  name: "Fresh & Clean",
+  phone: "+1 555-0100",
+  message: "Need a quote",
+  source: "website-landing",
 });
-// Returns: boolean
+
+console.log(contact.message); // "Contact submission received successfully"
 ```
 
 ## Types
 
-### ComparisonImage
+### Notable Types
 
 ```typescript
 interface ComparisonImage {
   id: string;
-  businessId: string;
-  beforeUrl: string;
-  afterUrl: string;
-  description: string | null;
-  createdAt: Date;
+  business_id: number;
+  before_url: string;
+  after_url: string;
   title: string;
+  description: string | null;
+  updated_at: string;
+  created_at: string;
 }
-```
 
-### ShowcaseImage
-
-```typescript
 interface ShowcaseImage {
   id: string;
-  businessId: string;
-  blobUrl: string[];
-  createdAt: Date;
-  description: string | null;
+  business_id: number;
+  image_url: string[];
   title: string;
-}
-```
-
-### QuickQuote
-
-```typescript
-interface QuickQuote {
-  id: string;
-  businessId: string;
-  parentId: string | null;
-  name: string;
   description: string | null;
-  basePrice: string | null;
-  enabled: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  updated_at: string;
+  created_at: string;
 }
-```
 
-### ContactData
-
-```typescript
 interface ContactData {
-  name: string;
-  email: string;
+  name?: string;
+  email?: string;
   phone?: string;
   message?: string;
+  [key: string]: unknown; // any additional smart fields
 }
-```
 
-### ApiResponse
-
-```typescript
-interface ApiResponse<T> {
-  data?: T;
-  error?: string;
-  status: number;
+interface ContactResponse {
+  success: boolean;
+  message: string;
+  contactId: string | null;
 }
-```
 
-## Error Handling
+interface GoogleReviewsResponse {
+  business: BusinessInfo; // includes id, name, optional website/phone
+  rating: number | null;
+  totalReviews: number;
+  reviews: GoogleReview[];
+}
 
-All methods return an `ApiResponse<T>` object that contains either:
-
-- `data`: The successful response data
-- `error`: An error message if the request failed
-- `status`: HTTP status code
-
-```typescript
-const result = await client.getComparisons();
-
-if (result.error) {
-  console.error("Error:", result.error);
-  console.error("Status:", result.status);
-} else {
-  console.log("Success:", result.data);
+interface SocialMediaResponse {
+  business: BusinessInfo;
+  posts: FacebookPost[] | InstagramPost[];
+  platform: "facebook" | "instagram";
 }
 ```
 

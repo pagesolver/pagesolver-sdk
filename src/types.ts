@@ -40,10 +40,11 @@ export interface ShowcasesResponse {
 
 // Contact API (/api/v1/business/contact)
 export interface ContactData {
-  name: string;
-  email: string;
+  name?: string;
+  email?: string;
   phone?: string;
   message?: string;
+  [key: string]: unknown;
 }
 
 export interface ContactResponse {
