@@ -115,6 +115,7 @@ describe("PageSolverClient", () => {
       name: "John Doe",
       email: "john@example.com",
       message: "Test message",
+      budget: 250,
     };
 
     const result = await client.contact(contactData);

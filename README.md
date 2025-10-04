@@ -35,12 +35,12 @@ const hours = await client.getGoogleHours();
 const instagram = await client.getInstagramPosts();
 const facebook = await client.getFacebookPosts();
 
-// Smart contact submissions (any fields allowed)
+// Smart contact submissions (any flat JSON payload works)
 const contact = await client.contact({
   name: "John Doe",
   email: "john@example.com",
   service: "Detailing",
-  message: "Hello from the SDK!",
+  requested_date: "2025-03-10",
 });
 
 console.log(contact.success, contact.contactId);
@@ -68,7 +68,7 @@ new PageSolverClient(businessKey: string)
 | `getGoogleHours()` | Fetch Google Business Profile opening hours | `GoogleHoursResponse` |
 | `getInstagramPosts()` | Fetch recent Instagram posts (requires connected account) | `SocialMediaResponse` |
 | `getFacebookPosts()` | Fetch recent Facebook posts (requires connected account) | `SocialMediaResponse` |
-| `contact(data)` | Submit a contact form payload | `ContactResponse`
+| `contact(data)` | Submit a contact form payload (flat JSON object) | `ContactResponse`
 
 All methods throw an `Error` when the API responds with a non-2xx status, so wrap calls in `try/catch` if you want to handle failures gracefully.
 
@@ -85,6 +85,7 @@ const contact = await client.contact({
   phone: "+1 555-0100",
   message: "Need a quote",
   source: "website-landing",
+  budget: 250,
 });
 
 console.log(contact.message); // "Contact submission received successfully"
@@ -116,13 +117,7 @@ interface ShowcaseImage {
   created_at: string;
 }
 
-interface ContactData {
-  name?: string;
-  email?: string;
-  phone?: string;
-  message?: string;
-  [key: string]: unknown; // any additional smart fields
-}
+type ContactData = Record<string, unknown>; // any flat key/value payload
 
 interface ContactResponse {
   success: boolean;
