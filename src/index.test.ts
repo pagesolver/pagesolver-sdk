@@ -34,6 +34,7 @@ const mockFetch = mock(() =>
         ],
         success: true,
         message: "Success",
+        contactId: "contact-123",
         business: {
           id: "123",
           name: "Test Business",
@@ -119,6 +120,7 @@ describe("PageSolverClient", () => {
     const result = await client.contact(contactData);
     expect(result).toHaveProperty("success");
     expect(result).toHaveProperty("message");
+    expect(result).toHaveProperty("contactId");
     expect(mockFetch).toHaveBeenCalledWith(
       "https://pagesolver.com/api/v1/business/contact",
       expect.objectContaining({

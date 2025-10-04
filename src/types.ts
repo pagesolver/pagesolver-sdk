@@ -49,6 +49,7 @@ export interface ContactData {
 export interface ContactResponse {
   success: boolean;
   message: string;
+  contactId: string | null;
 }
 
 // Google Reviews API (/api/v1/business/google/reviews)
