@@ -27,9 +27,12 @@ console.log(comparisons); // ComparisonImage[]
 const showcases = await client.getShowcases();
 console.log(showcases); // ShowcaseImage[]
 
-// Google Business Profile data
+// Google Business Profile reviews
 const reviews = await client.getGoogleReviews();
-const hours = await client.getGoogleHours();
+
+// Check which modules are enabled for this business
+const modules = await client.getModules();
+console.log(modules); // e.g. ["comparison_gallery", "google_review_display", ...]
 
 // Latest social posts
 const instagram = await client.getInstagramPosts();
@@ -65,10 +68,10 @@ new PageSolverClient(businessKey: string)
 | `getComparisons()` | Fetch before/after comparison images | `ComparisonImage[]` |
 | `getShowcases()` | Fetch showcase gallery images | `ShowcaseImage[]` |
 | `getGoogleReviews()` | Fetch Google Business Profile reviews + metadata | `GoogleReviewsResponse` |
-| `getGoogleHours()` | Fetch Google Business Profile opening hours | `GoogleHoursResponse` |
+| `getModules()` | Get list of activated modules for the business | `Module[]` |
 | `getInstagramPosts()` | Fetch recent Instagram posts (requires connected account) | `SocialMediaResponse` |
 | `getFacebookPosts()` | Fetch recent Facebook posts (requires connected account) | `SocialMediaResponse` |
-| `contact(data)` | Submit a contact form payload (flat JSON object) | `ContactResponse`
+| `contact(data)` | Submit a contact form payload (flat JSON object) | `ContactResponse` |
 
 All methods throw an `Error` when the API responds with a non-2xx status, so wrap calls in `try/catch` if you want to handle failures gracefully.
 
@@ -137,6 +140,17 @@ interface SocialMediaResponse {
   posts: FacebookPost[] | InstagramPost[];
   platform: "facebook" | "instagram";
 }
+
+// Module types - used for feature detection
+type Module =
+  | "comparison_gallery"
+  | "showcase_gallery"
+  | "smart_contact"
+  | "google_review_display"
+  | "google_review_requests"
+  | "facebook_feed_sync"
+  | "instagram_feed_sync"
+  | "xero_payment_notifications";
 ```
 
 ## License

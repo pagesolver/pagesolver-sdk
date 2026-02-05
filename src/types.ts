@@ -7,6 +7,22 @@ export interface BusinessInfo {
   website?: string;
 }
 
+// Module types
+export type Module =
+  | "comparison_gallery"
+  | "showcase_gallery"
+  | "smart_contact"
+  | "google_review_display"
+  | "google_review_requests"
+  | "facebook_feed_sync"
+  | "instagram_feed_sync"
+  | "xero_payment_notifications";
+
+// Modules API (/api/v1/business/modules)
+export interface ModulesResponse {
+  modules: Module[];
+}
+
 // Comparisons API (/api/v1/business/comparisons)
 export interface ComparisonImage {
   id: string;
@@ -60,25 +76,6 @@ export interface GoogleReviewsResponse {
   rating: number | null;
   totalReviews: number;
   reviews: GoogleReview[];
-}
-
-// Google Hours API (/api/v1/business/google/hours)
-export interface BusinessHours {
-  day: string;
-  hours: string;
-}
-
-export interface CurrentTime {
-  day: string;
-  time: string;
-}
-
-export interface GoogleHoursResponse {
-  business: BusinessInfo;
-  status: string;
-  isOpenNow: boolean;
-  hours: BusinessHours[];
-  currentTime: CurrentTime;
 }
 
 // Social Media API Types (/api/v1/business/social/*)

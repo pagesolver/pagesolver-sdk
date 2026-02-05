@@ -5,10 +5,11 @@ import type {
   ContactData,
   ContactResponse,
   FacebookPost,
-  GoogleHoursResponse,
   GoogleReview,
   GoogleReviewsResponse,
   InstagramPost,
+  Module,
+  ModulesResponse,
   ShowcaseImage,
   ShowcasesResponse,
   SocialMediaResponse,
@@ -86,9 +87,10 @@ export class PageSolverClient {
     );
   }
 
-  // Google Hours
-  async getGoogleHours(): Promise<GoogleHoursResponse> {
-    return await this.request<GoogleHoursResponse>("/business/google/hours");
+  // Modules - Get all activated modules for the business
+  async getModules(): Promise<Module[]> {
+    const response = await this.request<ModulesResponse>("/business/modules");
+    return response.modules;
   }
 
   // Social Media - Instagram
@@ -122,11 +124,10 @@ export type {
   ContactResponse,
   GoogleReview,
   GoogleReviewsResponse,
-  GoogleHoursResponse,
-  BusinessHours,
-  CurrentTime,
   FacebookPost,
   InstagramPost,
   SocialMediaResponse,
   BusinessInfo,
+  Module,
+  ModulesResponse,
 } from "./types";

@@ -49,18 +49,11 @@ const mockFetch = mock(() =>
             publishTime: "2024-01-01T00:00:00Z",
           },
         ],
-        status: "open",
-        isOpenNow: true,
-        hours: [
-          {
-            day: "Monday",
-            hours: "9:00 AM - 5:00 PM",
-          },
+        modules: [
+          "comparison_gallery",
+          "showcase_gallery",
+          "google_review_display",
         ],
-        currentTime: {
-          day: "Monday",
-          time: "10:00 AM",
-        },
         posts: [
           {
             id: "post1",
@@ -151,14 +144,11 @@ describe("PageSolverClient", () => {
     );
   });
 
-  it("should return Google hours", async () => {
-    const result = await client.getGoogleHours();
-    expect(result).toHaveProperty("business");
-    expect(result).toHaveProperty("status");
-    expect(result).toHaveProperty("isOpenNow");
-    expect(result).toHaveProperty("hours");
+  it("should return modules array directly", async () => {
+    const result = await client.getModules();
+    expect(Array.isArray(result)).toBe(true);
     expect(mockFetch).toHaveBeenCalledWith(
-      "https://pagesolver.com/api/v1/business/google/hours",
+      "https://pagesolver.com/api/v1/business/modules",
       expect.objectContaining({
         headers: expect.objectContaining({
           "Content-Type": "application/json",
