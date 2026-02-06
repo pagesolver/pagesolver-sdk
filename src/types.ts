@@ -23,6 +23,12 @@ export interface ModulesResponse {
   modules: Module[];
 }
 
+// Collection type (shared between showcases and comparisons)
+export interface Collection {
+  id: string;
+  name: string;
+}
+
 // Comparisons API (/api/v1/business/comparisons)
 export interface ComparisonImage {
   id: string;
@@ -33,10 +39,12 @@ export interface ComparisonImage {
   description: string | null;
   updated_at: string; // ISO string from database
   created_at: string; // ISO string from database
+  collection: Collection | null;
 }
 
 export interface ComparisonsResponse {
   comparisons: ComparisonImage[];
+  collections: Collection[];
 }
 
 // Showcases API (/api/v1/business/showcases)
@@ -48,10 +56,12 @@ export interface ShowcaseImage {
   description: string | null;
   updated_at: string; // ISO string from database
   created_at: string; // ISO string from database
+  collection: Collection | null;
 }
 
 export interface ShowcasesResponse {
   showcases: ShowcaseImage[];
+  collections: Collection[];
 }
 
 // Contact API (/api/v1/business/contact)
